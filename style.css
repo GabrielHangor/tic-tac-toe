@@ -11,8 +11,8 @@ body {
 }
 
 .main-container {
-  width: 400px;
-  height: 400px;
+  width: 412px;
+  height: 412px;
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -24,6 +24,7 @@ body {
   height: 100%;
   cursor: pointer;
 }
+
 
 .cell-5, .cell-8, .cell-4, .cell-6, .cell-7, .cell-9 {
   border-top: 3px solid #333333;
