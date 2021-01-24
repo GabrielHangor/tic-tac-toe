@@ -19,23 +19,19 @@ const gameModule = (function () {
     const playerName = counter % 2 === 0 ? "Player1" : "Player2";
     const player = playerFactory(playerName);
     counter++;
-    console.log(counter);
 
     return player;
   }
 
-  // function updateGameBoardArray(e) {
-  //   const index = e.target.getAttribute("data-num");
-
-  //     // const el = e.target.firstChild.src.includes("cancel.svg")
-  //     //   ? "Cross"
-  //     //   : "Circle";
-
-  // }
+  function updateGameBoardArray(e) {
+    const index = e.target.getAttribute("data-num");
+    const el = e.target.firstChild.src.includes("cancel.svg") ? "X" : "O";
+    gameBoard[index] = el;
+  }
 
   gameContainer.addEventListener("click", (e) => displayModule.renderEl(e));
 
-  return { currentPlayer };
+  return { currentPlayer, updateGameBoardArray };
 })();
 
 // Display module
@@ -43,13 +39,15 @@ const displayModule = (function () {
   function renderEl(e) {
     if (!e.target.hasChildNodes() && e.target.className !== "img") {
       e.target.appendChild(createImgEl(e));
+      gameModule.updateGameBoardArray(e);
     }
   }
 
-  function createImgEl(e) {
+  function createImgEl() {
     const img = document.createElement("img");
     img.src = gameModule.currentPlayer().symbol;
     img.className = "img";
+
     return img;
   }
 
