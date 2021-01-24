@@ -1,7 +1,7 @@
 // Game Module
 const gameModule = (function () {
-  const gameContainer = document.querySelector(".main-container");
-  const gameBoard = ["", "", "", "", "", "", "", "", ""];
+  let gameBoard = ["", "", "", "", "", "", "", "", ""];
+  const cells = document.querySelectorAll(".cell");
   let counter = 0;
 
   const winConditions = [
@@ -21,7 +21,11 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      if (gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c] && gameBoard[a]) {
+      if (
+        gameBoard[a] === gameBoard[b] &&
+        gameBoard[b] === gameBoard[c] &&
+        gameBoard[a]
+      ) {
         displayModule.displayWinMesage(gameBoard[a]);
       }
     });
@@ -41,20 +45,24 @@ const gameModule = (function () {
     gameBoard[index] = el;
   }
 
-  gameContainer.addEventListener("click", (e) => displayModule.render(e));
+  function resetData() {
+    counter = 0;
+    gameBoard = ["", "", "", "", "", "", "", "", ""];
+    cells.forEach((cell) => (cell.textContent = ""));
+  }
 
   return {
     currentPlayer,
     updateGameBoardArray,
     checkWinCondition,
-    gameContainer,
+    resetData,
   };
-
 })();
 
 // Display module
 const displayModule = (function () {
-  const winner = document.querySelector(".winner-message");
+  const gameContainer = document.querySelector(".main-container");
+  const winnerMsg = document.querySelector(".winner-message");
   const winContainer = document.querySelector(".win-container");
   const playAgainBtn = document.querySelector(".play-again-btn");
 
@@ -75,14 +83,26 @@ const displayModule = (function () {
   }
 
   function displayWinMesage(symbol) {
-    gameModule.gameContainer.style.display = "none";
+    gameContainer.style.display = "none";
     winContainer.style.display = "flex";
-    winner.textContent = symbol === "X" ? "X is the winner." : "O is the winner.";
+    winnerMsg.textContent =
+      symbol === "X" ? "X is the winner." : "O is the winner.";
 
     setTimeout(() => (playAgainBtn.style.visibility = "visible"), 500);
   }
 
-  return { render, displayWinMesage };
+  function restartGame() {
+    gameContainer.style.display = "grid";
+    winContainer.style.display = "none";
+    winnerMsg.textContent = "";
+    playAgainBtn.style.visibility = "hidden";
+    gameModule.resetData();
+  }
+
+  gameContainer.addEventListener("click", (e) => render(e));
+  playAgainBtn.addEventListener("click", restartGame);
+
+  return { displayWinMesage };
 })();
 
 // Player Factory function
