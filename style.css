@@ -8,6 +8,8 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
 }
 
 .main-container {
@@ -18,6 +20,52 @@ body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   animation: popup 1s;
+}
+
+.win-container > p {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.win-container {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 450px;
+  height: 450px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 5px 30px 10px rgba(177, 177, 177, 0.4);
+  border: solid 1px #1f1f1f;
+}
+
+button {
+  visibility: hidden;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  border: solid 2px #1f1f1f;
+  font-size: 2rem;
+  width: 90%;
+  height: 100px;
+  background: transparent;
+  color: #1f1f1f;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  border: solid 2px #1f1f1f;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+button:active {
+  transform: scale(0.96);
 }
 
 .cell {
@@ -31,8 +79,8 @@ body {
 
 img {
   animation: popup 1s;
-  width: 90%;
-  height: 90%;
+  width: 80%;
+  height: 80%;
 }
 
 @keyframes popup {
@@ -45,15 +93,18 @@ img {
   }
 }
 
-
-.cell-5, .cell-8, .cell-4, .cell-6, .cell-7, .cell-9 {
+.cell-5,
+.cell-8,
+.cell-4,
+.cell-6,
+.cell-7,
+.cell-9 {
   border-top: 3px solid #333333;
 }
 
-.cell-2, .cell-5, .cell-8 {
+.cell-2,
+.cell-5,
+.cell-8 {
   border-left: 3px solid #333333;
   border-right: 3px solid #333333;
 }
-
-
-

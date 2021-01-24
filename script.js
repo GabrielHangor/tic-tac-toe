@@ -17,7 +17,7 @@ const gameModule = (function () {
 
   function checkWinCondition() {
     winConditions.forEach((condition) => {
-      const a = condition[0];
+      const a = condition[0]; // a, b, c are just indexes of the gameBoard array
       const b = condition[1];
       const c = condition[2];
 
@@ -43,11 +43,21 @@ const gameModule = (function () {
 
   gameContainer.addEventListener("click", (e) => displayModule.render(e));
 
-  return { currentPlayer, updateGameBoardArray, checkWinCondition };
+  return {
+    currentPlayer,
+    updateGameBoardArray,
+    checkWinCondition,
+    gameContainer,
+  };
+
 })();
 
 // Display module
 const displayModule = (function () {
+  const winner = document.querySelector(".winner-message");
+  const winContainer = document.querySelector(".win-container");
+  const playAgainBtn = document.querySelector(".play-again-btn");
+
   function render(e) {
     if (!e.target.hasChildNodes() && e.target.className !== "img") {
       e.target.appendChild(createImgEl(e));
@@ -64,7 +74,13 @@ const displayModule = (function () {
     return img;
   }
 
-  function displayWinMesage(symbol) {}
+  function displayWinMesage(symbol) {
+    gameModule.gameContainer.style.display = "none";
+    winContainer.style.display = "flex";
+    winner.textContent = symbol === "X" ? "X is the winner." : "O is the winner.";
+
+    setTimeout(() => (playAgainBtn.style.visibility = "visible"), 500);
+  }
 
   return { render, displayWinMesage };
 })();
