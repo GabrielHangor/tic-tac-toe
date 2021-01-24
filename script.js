@@ -15,6 +15,18 @@ const gameModule = (function () {
     [2, 4, 6],
   ];
 
+  function checkWinCondition() {
+    winConditions.forEach((condition) => {
+      const a = condition[0];
+      const b = condition[1];
+      const c = condition[2];
+
+      if (gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c] && gameBoard[a]) {
+        displayModule.displayWinMesage(gameBoard[a]);
+      }
+    });
+  }
+
   function currentPlayer() {
     const playerName = counter % 2 === 0 ? "Player1" : "Player2";
     const player = playerFactory(playerName);
@@ -29,17 +41,18 @@ const gameModule = (function () {
     gameBoard[index] = el;
   }
 
-  gameContainer.addEventListener("click", (e) => displayModule.renderEl(e));
+  gameContainer.addEventListener("click", (e) => displayModule.render(e));
 
-  return { currentPlayer, updateGameBoardArray };
+  return { currentPlayer, updateGameBoardArray, checkWinCondition };
 })();
 
 // Display module
 const displayModule = (function () {
-  function renderEl(e) {
+  function render(e) {
     if (!e.target.hasChildNodes() && e.target.className !== "img") {
       e.target.appendChild(createImgEl(e));
       gameModule.updateGameBoardArray(e);
+      gameModule.checkWinCondition();
     }
   }
 
@@ -51,7 +64,9 @@ const displayModule = (function () {
     return img;
   }
 
-  return { renderEl };
+  function displayWinMesage(symbol) {}
+
+  return { render, displayWinMesage };
 })();
 
 // Player Factory function
