@@ -21,12 +21,10 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      if (
-        gameBoard[a] === gameBoard[b] &&
-        gameBoard[b] === gameBoard[c] &&
-        gameBoard[a]
-      ) {
+      if (gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c] && gameBoard[a]) {
         displayModule.displayWinMesage(gameBoard[a]);
+      } else if (!gameBoard.includes("")) {
+        displayModule.displayWinMesage("It is a tie.");
       }
     });
   }
@@ -83,19 +81,14 @@ const displayModule = (function () {
   }
 
   function displayWinMesage(symbol) {
-    gameContainer.style.display = "none";
-    winContainer.style.display = "flex";
     winnerMsg.textContent =
-      symbol === "X" ? "X is the winner." : "O is the winner.";
-
-    setTimeout(() => (playAgainBtn.style.visibility = "visible"), 500);
+      symbol === "X" || symbol == "O"
+        ? `${symbol} is the winner.`
+        : `${symbol}`;
   }
 
   function restartGame() {
-    gameContainer.style.display = "grid";
-    winContainer.style.display = "none";
     winnerMsg.textContent = "";
-    playAgainBtn.style.visibility = "hidden";
     gameModule.resetData();
   }
 

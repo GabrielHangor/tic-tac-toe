@@ -12,6 +12,13 @@ body {
   font-weight: 700;
 }
 
+.container {
+  width: 450px;
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
 .main-container {
   width: 450px;
   height: 450px;
@@ -28,20 +35,21 @@ body {
 }
 
 .win-container {
-  display: none;
+  display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  width: 450px;
-  height: 450px;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 5px 30px 10px rgba(177, 177, 177, 0.4);
-  border: solid 1px #1f1f1f;
+  justify-content: space-evenly;
+  align-content: center;
+  width: 100%;
+}
+
+.winner-message {
+  height: 50px;
+  width: 100%;
+  margin-top: 45px;
 }
 
 button {
-  visibility: hidden;
+  align-self: center;
   font-family: "Courier New", Courier, monospace;
   font-weight: 700;
   font-family: "Courier New", Courier, monospace;
