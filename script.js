@@ -21,13 +21,11 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      if (
-        gameBoard[a] === gameBoard[b] &&
-        gameBoard[a] === gameBoard[c] &&
-        gameBoard[a]
-      ) {
+      if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
         displayModule.displayWinMesage(gameBoard[a]);
-      } else if (!gameBoard.includes("")) {
+      } else if (gameBoard.includes("")) {
+        return null;
+      } else {
         displayModule.displayWinMesage("It is a tie.");
       }
     });
