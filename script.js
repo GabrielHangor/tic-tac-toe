@@ -21,7 +21,11 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      if (gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c] && gameBoard[a]) {
+      if (
+        gameBoard[a] === gameBoard[b] &&
+        gameBoard[a] === gameBoard[c] &&
+        gameBoard[a]
+      ) {
         displayModule.displayWinMesage(gameBoard[a]);
       } else if (!gameBoard.includes("")) {
         displayModule.displayWinMesage("It is a tie.");
@@ -61,7 +65,6 @@ const gameModule = (function () {
 const displayModule = (function () {
   const gameContainer = document.querySelector(".main-container");
   const winnerMsg = document.querySelector(".winner-message");
-  const winContainer = document.querySelector(".win-container");
   const playAgainBtn = document.querySelector(".play-again-btn");
 
   function render(e) {
@@ -81,6 +84,8 @@ const displayModule = (function () {
   }
 
   function displayWinMesage(symbol) {
+    gameContainer.removeEventListener("click", render);
+
     winnerMsg.textContent =
       symbol === "X" || symbol == "O"
         ? `${symbol} is the winner.`
@@ -88,14 +93,15 @@ const displayModule = (function () {
   }
 
   function restartGame() {
+    gameContainer.addEventListener("click", render);
     winnerMsg.textContent = "";
     gameModule.resetData();
   }
 
-  gameContainer.addEventListener("click", (e) => render(e));
+  gameContainer.addEventListener("click", render);
   playAgainBtn.addEventListener("click", restartGame);
 
-  return { displayWinMesage };
+  return { displayWinMesage, gameContainer };
 })();
 
 // Player Factory function
