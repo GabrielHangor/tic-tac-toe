@@ -16,19 +16,21 @@ const gameModule = (function () {
   ];
 
   function checkWinCondition() {
-    winConditions.forEach((condition) => {
+    let win = winConditions.find((condition) => {
       const a = condition[0]; // a, b, c are just indexes of the gameBoard array
       const b = condition[1];
       const c = condition[2];
 
-      if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-        displayModule.displayWinMesage(gameBoard[a]);
-      } else if (gameBoard.includes("")) {
-        return null;
-      } else {
-        displayModule.displayWinMesage("It is a tie.");
-      }
+      return (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]);
     });
+
+    if (win) {
+      displayModule.displayWinMessage(gameBoard[win[0]]);
+    } else if (gameBoard.includes("")) {
+      return null;
+    } else {
+      displayModule.displayWinMessage("It is a tie.");
+    }
   }
 
   function currentPlayer() {
@@ -41,7 +43,7 @@ const gameModule = (function () {
 
   function updateGameBoardArray(e) {
     const index = e.target.getAttribute("data-num");
-    const el = e.target.firstChild.src.includes("cancel.svg") ? "X" : "O";
+    const el = e.target.firstChild.src.includes("cancel") ? "X" : "O";
     gameBoard[index] = el;
   }
 
@@ -69,7 +71,7 @@ const displayModule = (function () {
     if (!e.target.hasChildNodes() && e.target.className !== "img") {
       e.target.appendChild(createImgEl(e));
       gameModule.updateGameBoardArray(e);
-      gameModule.checkWinCondition();
+      gameModule.checkWinCondition(e);
     }
   }
 
@@ -81,13 +83,11 @@ const displayModule = (function () {
     return img;
   }
 
-  function displayWinMesage(symbol) {
+  function displayWinMessage(symbol) {
     gameContainer.removeEventListener("click", render);
 
     winnerMsg.textContent =
-      symbol === "X" || symbol == "O"
-        ? `${symbol} is the winner.`
-        : `${symbol}`;
+      symbol == "X" || symbol == "O" ? `${symbol} is the winner.` : `${symbol}`;
   }
 
   function restartGame() {
@@ -99,7 +99,7 @@ const displayModule = (function () {
   gameContainer.addEventListener("click", render);
   playAgainBtn.addEventListener("click", restartGame);
 
-  return { displayWinMesage, gameContainer };
+  return { displayWinMessage, gameContainer };
 })();
 
 // Player Factory function
