@@ -21,7 +21,11 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      return (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]);
+      return (
+        gameBoard[a] &&
+        gameBoard[a] === gameBoard[b] &&
+        gameBoard[a] === gameBoard[c]
+      );
     });
 
     if (win) {
@@ -33,18 +37,16 @@ const gameModule = (function () {
     }
   }
 
-  function currentPlayer() {
-    const playerName = counter % 2 === 0 ? "Player1" : "Player2";
-    const player = playerFactory(playerName);
-    counter++;
-
-    return player;
-  }
-
-  function updateGameBoardArray(e) {
-    const index = e.target.getAttribute("data-num");
-    const el = e.target.firstChild.src.includes("cancel") ? "X" : "O";
-    gameBoard[index] = el;
+  function makeTurn(e) {
+    console.log(counter, gameBoard);
+    if (!e.target.hasChildNodes() && e.target.className !== "img") {
+      const index = e.target.getAttribute("data-num");
+      const symbol = counter % 2 === 0 ? "X" : "O";
+      gameBoard[index] = symbol;
+      displayModule.render(e);
+      checkWinCondition();
+      counter++;
+    }
   }
 
   function resetData() {
@@ -54,10 +56,9 @@ const gameModule = (function () {
   }
 
   return {
-    currentPlayer,
-    updateGameBoardArray,
-    checkWinCondition,
+    makeTurn,
     resetData,
+    gameBoard,
   };
 })();
 
@@ -68,42 +69,42 @@ const displayModule = (function () {
   const playAgainBtn = document.querySelector(".play-again-btn");
 
   function render(e) {
-    if (!e.target.hasChildNodes() && e.target.className !== "img") {
-      e.target.appendChild(createImgEl(e));
-      gameModule.updateGameBoardArray(e);
-      gameModule.checkWinCondition(e);
-    }
+    e.target.appendChild(createImgEl(e));
   }
 
-  function createImgEl() {
+  function createImgEl(e) {
     const img = document.createElement("img");
-    img.src = gameModule.currentPlayer().symbol;
+    const index = e.target.getAttribute("data-num");
+    img.src = gameModule.gameBoard[index].includes("X")
+      ? "cancel.svg"
+      : "circle.svg";
     img.className = "img";
 
+    console.log (img)
     return img;
   }
 
   function displayWinMessage(symbol) {
-    gameContainer.removeEventListener("click", render);
+    gameContainer.removeEventListener("click", gameModule.makeTurn);
 
     winnerMsg.textContent =
       symbol == "X" || symbol == "O" ? `${symbol} is the winner.` : `${symbol}`;
   }
 
   function restartGame() {
-    gameContainer.addEventListener("click", render);
+    gameContainer.addEventListener("click", gameModule.makeTurn);
     winnerMsg.textContent = "";
     gameModule.resetData();
   }
 
-  gameContainer.addEventListener("click", render);
+  gameContainer.addEventListener("click", gameModule.makeTurn);
   playAgainBtn.addEventListener("click", restartGame);
 
-  return { displayWinMessage, gameContainer };
+  return { displayWinMessage, gameContainer, render };
 })();
 
-// Player Factory function
-const playerFactory = function (name) {
-  const symbol = name === "Player1" ? "cancel.svg" : "circle.svg";
-  return { name, symbol };
-};
+// // Player Factory function
+// const playerFactory = function (name) {
+//   const symbol = name === "Player1" ? "cancel.svg" : "circle.svg";
+//   return { name, symbol };
+// };
