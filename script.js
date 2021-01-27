@@ -21,11 +21,7 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      return (
-        gameBoard[a] &&
-        gameBoard[a] === gameBoard[b] &&
-        gameBoard[a] === gameBoard[c]
-      );
+      return (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]);
     });
 
     if (win) {
@@ -38,7 +34,6 @@ const gameModule = (function () {
   }
 
   function makeTurn(e) {
-    console.log(counter, gameBoard);
     if (!e.target.hasChildNodes() && e.target.className !== "img") {
       const index = e.target.getAttribute("data-num");
       const symbol = counter % 2 === 0 ? "X" : "O";
@@ -47,11 +42,12 @@ const gameModule = (function () {
       checkWinCondition();
       counter++;
     }
+    console.log(counter, gameBoard);
   }
 
   function resetData() {
     counter = 0;
-    gameBoard = ["", "", "", "", "", "", "", "", ""];
+    gameBoard.fill("");
     cells.forEach((cell) => (cell.textContent = ""));
   }
 
@@ -75,12 +71,11 @@ const displayModule = (function () {
   function createImgEl(e) {
     const img = document.createElement("img");
     const index = e.target.getAttribute("data-num");
-    img.src = gameModule.gameBoard[index].includes("X")
+    img.src = gameModule.gameBoard[index] === ("X")
       ? "cancel.svg"
       : "circle.svg";
     img.className = "img";
 
-    console.log (img)
     return img;
   }
 
@@ -92,9 +87,9 @@ const displayModule = (function () {
   }
 
   function restartGame() {
-    gameContainer.addEventListener("click", gameModule.makeTurn);
     winnerMsg.textContent = "";
     gameModule.resetData();
+    gameContainer.addEventListener("click", gameModule.makeTurn);
   }
 
   gameContainer.addEventListener("click", gameModule.makeTurn);
@@ -102,9 +97,3 @@ const displayModule = (function () {
 
   return { displayWinMessage, gameContainer, render };
 })();
-
-// // Player Factory function
-// const playerFactory = function (name) {
-//   const symbol = name === "Player1" ? "cancel.svg" : "circle.svg";
-//   return { name, symbol };
-// };
