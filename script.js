@@ -21,7 +21,11 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      return (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]);
+      return (
+        gameBoard[a] &&
+        gameBoard[a] === gameBoard[b] &&
+        gameBoard[a] === gameBoard[c]
+      );
     });
 
     if (win) {
@@ -41,8 +45,11 @@ const gameModule = (function () {
       displayModule.render(e);
       checkWinCondition();
       counter++;
+
+      // if (AImode) {
+      //   do smth;
+      // }
     }
-    console.log(counter, gameBoard);
   }
 
   function resetData() {
@@ -64,16 +71,14 @@ const displayModule = (function () {
   const winnerMsg = document.querySelector(".winner-message");
   const playAgainBtn = document.querySelector(".play-again-btn");
 
-  function render(e) {
+  function render(e, gameBoardIndex) {
     e.target.appendChild(createImgEl(e));
   }
 
-  function createImgEl(e) {
+  function createImgEl(e, gameBoardIndex) {
     const img = document.createElement("img");
     const index = e.target.getAttribute("data-num");
-    img.src = gameModule.gameBoard[index] === ("X")
-      ? "cancel.svg"
-      : "circle.svg";
+    img.src = gameModule.gameBoard[index] === "X" ? "cancel.svg" : "circle.svg";
     img.className = "img";
 
     return img;
