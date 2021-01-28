@@ -66,7 +66,11 @@ body {
   height: 70px;
 }
 
-
+.selected {
+  border: solid 2px #1f1f1f;
+  background: #1f1f1f;
+  color: #fff;
+}
 
 .start-button {
   width: 95%;

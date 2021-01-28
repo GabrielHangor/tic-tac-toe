@@ -1,8 +1,10 @@
 // Game Module
 const gameModule = (function () {
+  const selectBtnContainer = document.querySelector(".select-buttons");
   let gameBoard = ["", "", "", "", "", "", "", "", ""];
   const cells = document.querySelectorAll(".cell");
   let counter = 0;
+  let computerMode = false;
 
   const winConditions = [
     [0, 1, 2],
@@ -58,6 +60,14 @@ const gameModule = (function () {
     cells.forEach((cell) => (cell.textContent = ""));
   }
 
+  function selectMode(e) {
+    e.target.id === "computer" ? (computerMode = true) : (computerMode = false);
+    displayModule.colorSelectBtn(e);
+    console.log(computerMode);
+  }
+
+  selectBtnContainer.addEventListener("click", selectMode);
+
   return {
     makeTurn,
     resetData,
@@ -67,9 +77,13 @@ const gameModule = (function () {
 
 // Display module
 const displayModule = (function () {
-  const gameContainer = document.querySelector(".main-container");
+  const mainContainer = document.querySelector(".main-container");
   const winnerMsg = document.querySelector(".winner-message");
   const playAgainBtn = document.querySelector(".play-again-btn");
+  const selectBtns = document.querySelectorAll(".select-btn");
+  const startBtn = document.querySelector(".start-game");
+  const startContainer = document.querySelector(".start-game-container");
+  const winContainer = document.querySelector(".win-container");
 
   function render(e, gameBoardIndex) {
     e.target.appendChild(createImgEl(e));
@@ -85,7 +99,7 @@ const displayModule = (function () {
   }
 
   function displayWinMessage(symbol) {
-    gameContainer.removeEventListener("click", gameModule.makeTurn);
+    mainContainer.removeEventListener("click", gameModule.makeTurn);
 
     winnerMsg.textContent =
       symbol == "X" || symbol == "O" ? `${symbol} is the winner.` : `${symbol}`;
@@ -94,11 +108,23 @@ const displayModule = (function () {
   function restartGame() {
     winnerMsg.textContent = "";
     gameModule.resetData();
-    gameContainer.addEventListener("click", gameModule.makeTurn);
+    mainContainer.addEventListener("click", gameModule.makeTurn);
   }
 
-  gameContainer.addEventListener("click", gameModule.makeTurn);
-  playAgainBtn.addEventListener("click", restartGame);
+  function colorSelectBtn(e) {
+    selectBtns.forEach((btn) => btn.classList.remove("selected"));
+    e.target.classList.toggle("selected");
+  }
 
-  return { displayWinMessage, gameContainer, render };
+  function startGame() {
+    startContainer.style.display = "none";
+    winContainer.style.display = "flex";
+    mainContainer.style.display = "grid";
+  }
+
+  mainContainer.addEventListener("click", gameModule.makeTurn);
+  playAgainBtn.addEventListener("click", restartGame);
+  startBtn.addEventListener("click", startGame);
+
+  return { displayWinMessage, render, colorSelectBtn };
 })();
