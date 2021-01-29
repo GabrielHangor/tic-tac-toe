@@ -48,9 +48,21 @@ const gameModule = (function () {
       checkWinCondition();
       counter++;
 
-      // if (AImode) {
-      //   do smth;
-      // }
+      if (computerMode) {
+        const computerSymbol = counter % 2 === 0 ? "X" : "O";
+        getComputerIndex();
+      }
+    }
+  }
+
+  function getComputerIndex() {
+    let randomIndex;
+
+    for (let i = 0; i <= gameBoard.length; i++) {
+      randomIndex = Math.floor(Math.random() * gameBoard.length);
+      if (gameBoard[randomIndex] == "") {
+        return randomIndex;
+      }
     }
   }
 
