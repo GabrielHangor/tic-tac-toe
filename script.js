@@ -2,7 +2,6 @@
 const gameModule = (function () {
   const selectBtnContainer = document.querySelector(".select-buttons");
   let gameBoard = ["", "", "", "", "", "", "", "", ""];
-  const cells = document.querySelectorAll(".cell");
   let counter = 0;
   let computerMode = false;
 
@@ -50,7 +49,11 @@ const gameModule = (function () {
 
       if (computerMode) {
         const computerSymbol = counter % 2 === 0 ? "X" : "O";
-        getComputerIndex();
+        const computerIndex = getComputerIndex();
+        gameBoard[computerIndex] = computerSymbol;
+        displayModule.renderComputer(computerIndex);
+        checkWinCondition();
+        counter++;
       }
     }
   }
@@ -58,7 +61,7 @@ const gameModule = (function () {
   function getComputerIndex() {
     let randomIndex;
 
-    for (let i = 0; i <= gameBoard.length; i++) {
+    for (let i = 0; i < gameBoard.length; i++) {
       randomIndex = Math.floor(Math.random() * gameBoard.length);
       if (gameBoard[randomIndex] == "") {
         return randomIndex;
@@ -69,7 +72,6 @@ const gameModule = (function () {
   function resetData() {
     counter = 0;
     gameBoard.fill("");
-    cells.forEach((cell) => (cell.textContent = ""));
   }
 
   function selectMode(e) {
@@ -84,6 +86,7 @@ const gameModule = (function () {
     makeTurn,
     resetData,
     gameBoard,
+    computerMode,
   };
 })();
 
@@ -96,14 +99,28 @@ const displayModule = (function () {
   const startBtn = document.querySelector(".start-game");
   const startContainer = document.querySelector(".start-game-container");
   const winContainer = document.querySelector(".win-container");
+  const cells = document.querySelectorAll(".cell");
 
-  function render(e, gameBoardIndex) {
+  function render(e) {
     e.target.appendChild(createImgEl(e));
   }
 
-  function createImgEl(e, gameBoardIndex) {
+  function renderComputer(computerIndex) {
+    cells[computerIndex].appendChild(createComputerImgEl(computerIndex));
+  }
+
+  function createImgEl(e) {
     const img = document.createElement("img");
-    const index = e.target.getAttribute("data-num");
+    index = e.target.getAttribute("data-num");
+    img.src = gameModule.gameBoard[index] === "X" ? "cancel.svg" : "circle.svg";
+    img.className = "img";
+
+    return img;
+  }
+
+  function createComputerImgEl(computerIndex) {
+    const img = document.createElement("img");
+    index = computerIndex;
     img.src = gameModule.gameBoard[index] === "X" ? "cancel.svg" : "circle.svg";
     img.className = "img";
 
@@ -120,6 +137,7 @@ const displayModule = (function () {
   function restartGame() {
     winnerMsg.textContent = "";
     gameModule.resetData();
+    cells.forEach((cell) => (cell.textContent = ""));
     mainContainer.addEventListener("click", gameModule.makeTurn);
   }
 
@@ -138,5 +156,5 @@ const displayModule = (function () {
   playAgainBtn.addEventListener("click", restartGame);
   startBtn.addEventListener("click", startGame);
 
-  return { displayWinMessage, render, colorSelectBtn };
+  return { displayWinMessage, render, colorSelectBtn, renderComputer };
 })();
