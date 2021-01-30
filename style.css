@@ -165,7 +165,16 @@ img {
   }
 
   .main-container {
-    width: 99%;
+    width: 95%;
     height: 60%;
+  }
+
+  .start-game-container > p {
+    font-size: 2rem;
+  }
+
+  .select-btn {
+    font-size: 1rem;
+    height: 50px;
   }
 }

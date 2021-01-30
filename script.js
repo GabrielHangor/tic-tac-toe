@@ -22,11 +22,7 @@ const gameModule = (function () {
       const b = condition[1];
       const c = condition[2];
 
-      return (
-        gameBoard[a] &&
-        gameBoard[a] === gameBoard[b] &&
-        gameBoard[a] === gameBoard[c]
-      );
+      return (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]);
     });
 
     if (win) {
@@ -47,13 +43,15 @@ const gameModule = (function () {
       checkWinCondition();
       counter++;
 
-      if (computerMode) {
-        const computerSymbol = counter % 2 === 0 ? "X" : "O";
-        const computerIndex = getComputerIndex();
-        gameBoard[computerIndex] = computerSymbol;
-        displayModule.renderComputer(computerIndex);
-        checkWinCondition();
-        counter++;
+      if (computerMode && !displayModule.winnerMsg.textContent) {
+        setTimeout(() => {
+          const computerSymbol = counter % 2 === 0 ? "X" : "O";
+          const computerIndex = getComputerIndex();
+          gameBoard[computerIndex] = computerSymbol;
+          displayModule.renderComputer(computerIndex);
+          checkWinCondition();
+          counter++;
+        }, Math.floor(Math.random() * 500));
       }
     }
   }
@@ -72,6 +70,7 @@ const gameModule = (function () {
   function resetData() {
     counter = 0;
     gameBoard.fill("");
+    computerMode = false;
   }
 
   function selectMode(e) {
@@ -138,6 +137,10 @@ const displayModule = (function () {
     winnerMsg.textContent = "";
     gameModule.resetData();
     cells.forEach((cell) => (cell.textContent = ""));
+    startContainer.style.display = "flex";
+    winContainer.style.display = "none";
+    mainContainer.style.display = "none";
+    selectBtns.forEach((btn) => btn.classList.remove("selected"));
     mainContainer.addEventListener("click", gameModule.makeTurn);
   }
 
@@ -156,5 +159,11 @@ const displayModule = (function () {
   playAgainBtn.addEventListener("click", restartGame);
   startBtn.addEventListener("click", startGame);
 
-  return { displayWinMessage, render, colorSelectBtn, renderComputer };
+  return {
+    displayWinMessage,
+    render,
+    colorSelectBtn,
+    renderComputer,
+    winnerMsg,
+  };
 })();
